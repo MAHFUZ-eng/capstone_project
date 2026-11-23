@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/mahfuz/CODE/capstone_/Transport Booking System/main'
+relocations:     []
+...

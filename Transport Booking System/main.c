@@ -67,6 +67,10 @@ int trip_count=0;
 int booking_count=0;
 
 
+
+
+
+
 void ensure_files_exists(void){ //VEHICLE_FILE, ROUTE_FILE, TRIP_FILE, BOOKING_FILE, TRANSACTION_FILE
     FILE *file;
     file=fopen(VEHICLE_FILE,"ab");
@@ -94,12 +98,22 @@ void ensure_files_exists(void){ //VEHICLE_FILE, ROUTE_FILE, TRIP_FILE, BOOKING_F
         fclose(file);
     }
 }
+
+
+
+
+
  void clear_input(void){
  int ch;
  while ((ch=getchar()) !='\n' && ch!=EOF) // to remove /n from buffer so that it do not get sztuck in scanf or fegts also eof is end of file it will run until \n
  {
  }
  }
+
+
+
+
+
 void read_line(char *text,int size){
     if(fgets(text,size,stdin)!=NULL)//size and sizeof is 2 different things size is variable now but sizeof calculase how much memory is consumed 
     {
@@ -113,6 +127,11 @@ void read_line(char *text,int size){
         }
     } // to remove the new line character \n when we click enter c gets the \n so we have to remove it and replace it by \0 then we are checking it using length and length -1 then replaing it wirth /0
 }
+
+
+
+
+
 int read_int(const char *message){
     int value;
     for(;;) // using infinite loop so that user can input infinte
@@ -128,24 +147,34 @@ int read_int(const char *message){
     }
 }
 
-float read_float(const char *message){
+
+
+
+
+
+float read_float(const char *message){ // what message will user see but cant change the message as it is const
     float value;
     for(;;){
         printf("%s",message);
         if(scanf("%f",&value)==1){ // samne as read_int
-            clear_input();
-            return value;
+            clear_input(); // if something goes worng will be cleared
+            return value; // returning the value to read_float
         }
         clear_input();
         printf("Invalid input. Please enter a number\n");
     }
 }
-void load_data(void){
+
+
+
+// rb = read binary
+
+void load_data(void){ // this section loads the data from the memory it will open the file the will read data with rb
     FILE *file;
     file= fopen(VEHICLE_FILE,"rb"); // rb = read binary read the file
     if(file!=NULL)
     {
-        vehicle_count = (int)fread(
+        vehicle_count = (int)fread( // fread vehicle data vehcile array te rakhe
             vehicles,
             sizeof(struct Vehicle),
             MAX_VEHICLES,
@@ -153,7 +182,285 @@ void load_data(void){
         );
         fclose(file);
     }
+    file = fopen(ROUTE_FILE, "rb");
+
+    if (file != NULL)
+    {
+        vehicle_count = (int)fread( // data rakhche route array te
+            vehicles,
+            sizeof(struct Route),
+            MAX_VEHICLES,
+            file
+        );
+
+        fclose(file);   
+    }
+    file =fopen(TRIP_FILE,"rb");
+    
+    if(file!= NULL)
+    {
+        trip_count=(int)fread( // data rakhche trip array te
+            trips,
+            sizeof(struct Trip),
+            MAX_TRIPS,
+            file
+        );
+    }
+    fclose(file);
+ 
+    file= fopen(BOOKING_FILE,"rb");
+    if(file!=NULL)
+    {
+booking_count=(int)fread( // data rakhe booking e
+bookings,
+sizeof(struct Booking),
+MAX_BOOKINGS,
+file
+);
+    
+    fclose(file);
 }
+}
+
+// wb = write binary
+//fread() file থেকে memory-তে data আনে।
+
+// fwrite() memory থেকে file-এ data পাঠায়।
+
+
+void save_vehicles(void)
+{
+    FILE *file =fopen(VEHICLE_FILE,"wb");
+    if(file==NULL){
+        printf("Could not save vehicles in vehicles.dat\n");
+        return;
+    }
+    fwrite(
+        vehicles,
+        sizeof(struct Vehicle),
+        vehicle_count,
+        file
+    );
+    fclose(file);
+}
+
+
+
+void save_routes(void){
+    FILE *file=fopen(ROUTE_FILE,"wb");
+    if(file==NULL){
+        printf("Could not save route in routes.dat\n");
+        return;
+    }
+        fwrite(
+            routes,
+            sizeof(struct Route),
+            route_count,
+            file
+        );
+        fclose(file);
+}
+
+
+
+void save_trips(void){
+    FILE *file=fopen(TRIP_FILE,"wb");
+    if(file==NULL){
+        printf("Could not save trips in trips.data");
+        return;
+    }
+    fwrite(
+        trips,
+        sizeof(struct Trip),
+        trip_count,
+        file
+    );
+    fclose(file);
+}
+
+
+
+void save_bookings(void){
+    FILE *file =fopen(BOOKING_FILE,"wb");
+    if(file==NULL){
+        printf("Could not save booking in booking.data\n");
+        return;
+    }
+    fwrite(
+        bookings,
+        sizeof(struct Booking),
+        booking_count,
+        file
+    );
+    fclose(file);
+}
+
+
+
+void admin_menu(void)
+{
+    for(;;){
+    printf("\n===== ADMIN MENU =====\n");
+        printf("1. Add Vehicle\n");
+        printf("2. View Vehicles\n");
+        printf("3. Update Vehicle\n");
+        printf("4. Add Route\n");
+        printf("5. View Routes\n");
+        printf("6. Update Route\n");
+        printf("7. Schedule Trip\n");
+        printf("8. View Trips\n");
+        printf("9. Cancel Trip\n");
+        printf("10. View All Bookings\n");
+        printf("11. View Reports\n");
+        printf("12. View Transaction Log\n");
+        printf("0. Back to Main Menu\n");
+
+        int choice = read_int("Choose an option: ");
+
+        switch (choice)
+        {
+            case 1:
+            break;
+            case 2:
+            break;
+            case 3:
+            break;
+            case 4:
+            break;
+            case 5:
+            break;
+            case 6:
+            break;
+            case 7:
+            break;
+            case 8:
+            break;
+            case 9:
+            break;
+            case 10:
+            break;
+            case 11:
+            break;
+            case 12:
+            break;
+            case 0:
+            printf("Thank you for using this system.\n");
+                return;
+            default:
+                printf("Invalid choice.\n");
+        }
+    }
+}
+
+void passenger_menu(void)
+{
+    for (;;)
+    {
+        printf("\n===== PASSENGER MENU =====\n");
+        printf("1. Browse Trips\n");
+        printf("2. Book Ticket\n");
+        printf("3. Cancel Booking\n");
+        printf("0. Back to Main Menu\n");
+
+        int choice = read_int("Choose an option: ");
+
+        switch (choice)
+        {
+            case 1:
+            case 2:
+            case 3:
+                printf("This feature is coming next.\n");
+                break;
+
+            case 0:
+                return;
+
+            default:
+                printf("Invalid choice.\n");
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct Vehicle *find_vehicle(int id){ // finding vechile with id with the help of the cound and vehcile[i]
+    for(int i=0;i<vehicle_count;i++){
+        if(vehicles[i].Vehicle_id == id){
+            return &vehicles[i];
+        }
+    }
+    return NULL;
+ }
+  int next_vehicle_id(void)
+  {
+    int id=1;
+    while(find_vehicle(id) != NULL){ // will find the id if not null then will add 1 but initial it is 1
+        id++;
+    }
+    return id;
+  }
+
+struct Route *find_route(int id)
+{
+    for(int i=0;i<route_count;i++){
+        if(routes[i].Route_id==id){
+            return & routes[i];
+        }
+    }
+    return NULL;
+}
+
+struct Trip *find_trip(int id)
+{
+    for(int i=0;i<trip_count;i++){
+        if(trips[i].Trip_id==id){
+            return & trips[i];
+        }
+    }
+    return NULL;
+}
+  struct Booking *find_booking(int id)
+  {
+   for(int i=0;i<booking_count;i++){
+    if(bookings[i].Booking_id==id){
+        return & bookings[i];
+    }
+   }
+   return NULL;
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  int main(void){
     ensure_files_exists();
     load_data();
@@ -165,16 +472,16 @@ void load_data(void){
         printf("1. Admin Login\n");
         printf("2. Passenger Menu\n");
         printf("0. Exit\n");
-        int choice = read_int("Choose an option");
+        int choice = read_int("Choose an option: ");
         switch (choice)
         {
             case 1:
-            printf("Admin menus is coming next.\n");
+            admin_menu();
             break;
             case 2:
-            printf("Passenger menu is coming next.\n");
+           passenger_menu();
             break;
-            case 3:
+            case 0:
             printf("Thank you for using the system.\n");
             return 0;
 
@@ -184,3 +491,4 @@ void load_data(void){
     }
     return 0;
  }
+
