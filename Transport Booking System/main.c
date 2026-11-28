@@ -186,13 +186,12 @@ void load_data(void){ // this section loads the data from the memory it will ope
 
     if (file != NULL)
     {
-        vehicle_count = (int)fread( // data rakhche route array te
-            vehicles,
+        route_count = (int)fread( // data rakhche route array te
+            routes,
             sizeof(struct Route),
-            MAX_VEHICLES,
+            MAX_ROUTES,
             file
         );
-
         fclose(file);   
     }
     file =fopen(TRIP_FILE,"rb");
@@ -205,9 +204,8 @@ void load_data(void){ // this section loads the data from the memory it will ope
             MAX_TRIPS,
             file
         );
-    }
     fclose(file);
- 
+    }
     file= fopen(BOOKING_FILE,"rb");
     if(file!=NULL)
     {
